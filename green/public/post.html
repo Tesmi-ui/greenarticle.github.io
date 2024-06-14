@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Search</title>
+    <style>
+        /* Add some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input, button {
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Find User</h1>
+        <div>
+            <h2>By ID</h2>
+            <input type="text" id="userIdInput" placeholder="Enter User ID">
+            <button onclick="findUserById()">Search</button>
+        </div>
+        <div id="user-profile">
+            <!-- User details will be displayed here -->
+        </div>
+
+        <div>
+            <h2>By Email</h2>
+            <input type="email" id="userEmailInput" placeholder="Enter User Email">
+            <button onclick="findUserByEmail()">Search</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script src="../js/finduser.js"></script>
+</body>
+</html>

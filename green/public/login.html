@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        /* Style for login form */
+        body{
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('../uploads/ndsxs3m6.png')
+        }
+#loginForm {
+    align-items: center;
+
+    max-width: 300px;
+    margin: 50px auto;
+    padding: 50px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#loginForm label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#loginForm input[type="email"],
+#loginForm input[type="password"] {
+    width: 100%;
+    padding: 18px;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#loginForm button {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#loginForm button:hover {
+    background-color: #45a049;
+}
+#stregister{
+    display: flex;
+    font-weight: bold;
+    background: none;
+    color: #101c10;
+    border-radius: 5px;
+    border-color: black;
+    a{
+        color: white;
+        margin: 2px;
+        padding: 15px;
+        background: #36c136;
+        border-radius: 5px;
+        align-items: center;
+        text-align: center;
+        text-decoration: none;
+    }
+    
+
+}
+
+
+    </style>
+</head>
+<body>
+</div>
+    <div>
+    <form id="loginForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Login</button>
+    </form>
+    <div id ="stregister"><p>don't have account?<a href="register.html">Register Here</a></p></div>
+    </div>
+    <br>
+    
+    
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            
+            // Get the email and password from the form
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Make a POST request to the server to authenticate the user
+            fetch('api/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Login failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Store the JWT token in localStorage
+                localStorage.setItem('token', data.token);
+                // Redirect to a protected page or perform any other action
+                window.location.href = data.dashboardRoute;
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                // Display an error message to the user
+                alert('Login failed. Please try again.');
+            });
+        });
+        
+        // Function to fetch protected data
+        function fetchProtectedData() {
+            // Retrieve the JWT token from localStorage
+            const token = localStorage.getItem('token');
+
+            // Make a GET request to a protected route with the token in the header
+            fetch('/api/posts', {
+                headers: {
+                    'auth-token': token
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Access denied');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Display the protected data to the user
+                
+
+                console.log('/api/posts', data);
+                
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+        }
+
+    </script>
+</body>
+</html>
