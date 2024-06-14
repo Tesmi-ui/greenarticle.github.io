@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <header>
+        <!-- Your header content -->
+    </header>
+    <div class="search-container">
+        <form id="searchForm" action="api/products/userDashboard/search" method="GET">
+            <input type="text" placeholder="Search..." name="search" id="searchInput">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <main>
+        <div class="product-details-container">
+            <h1>Product Details</h1>
+            <div id="product-details"></div>
+        </div>
+    </main>
+
+    <footer>
+        <!-- Your footer content -->
+    </footer>
+
+    <script src="productsView.js"></script>
+</body>
+</html>

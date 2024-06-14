@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+    
+</head>
+<body>
+ <header>
+       <div class="navbar">
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                
+
+                <li><a href="/login.html">Login</a></li>
+            </ul>
+            
+    <div class="search-container">
+        <form id="searchForm" >
+            <input type="text" placeholder="Search by name or category" name="search" id="searchInput">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+        
+        </nav>
+       </div>
+</header>
+<body>
+    <section   class="pdcts">
+        <div>
+           <p>Embrace the power of greenery to breathe life into your home</p>
+       </div>
+            
+    </section>
+   
+
+</body>
+
+<select id="category-filter" name="category" required>
+    <option value="Indoor Plant">Indoor Plant</option>
+    <option value="Outdoor Plant">Outdoor Plant</option>
+    <option value="Indoor Pot">Indoor Pot</option>
+    <option value="Indoor Combo">Indoor Combo</option>
+    <option value="Outdoor Combo">Outdoor Combo</option>
+    <option value="Outdoor Pot">Outdoor Pot</option>
+</select>
+
+
+    <!-- Search results section -->
+    <div id="searchresults">
+        
+        <div id="search-results-list"></div>
+
+    </div>
+
+
+
+
+
+
+
+    <section><div id="product-list"></div></section>
+    
+    <footer>
+        <footer>
+            <footer>
+                <div class="container">
+                    <div class="footer-section">
+                        <h3>About Us</h3>
+                        <p>Green-articles, we are happy to serve you, real moment for your home</p>
+                    </div>
+                    <div class="footer-section">
+                        
+                        <ul>
+                            <li><a href="contact.html"><h3>Contact</h3><p>Email: greenarticles05@gmail.com<br>Phone: </p>
+                            <li><a href="/policy.html">Returns & Exchanges</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Shop</h3>
+                        <ul>
+                            <li><a href="/products.html">Plants</a></li>
+                            <li><a href="/products.html">Pots</a></li>
+                    
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Follow Us</h3>
+                        <ul>
+                            <li><a href="https://www.facebook.com/people/Pankaj-Kale/61554263592824/">Facebook</a></li>
+                           
+                            <li><a href="https://www.instagram.com/green_articles_/?utm_source=qr&igsh=ZGczYW11anl2YmI%3D">Instagram</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bottom-footer">
+                    <p>&copy; 2024 Green-Articles. All rights reserved.</p>
+                </div>
+            </footer>
+
+            
+<script>
+    // When the user scrolls the page, execute myFunction
+window.onscroll = function() {myFunction()};
+         
+    // Get the navbar
+    var navbar = document.querySelector(".navbar");
+    
+    // Get the offset position of the navbar
+    var sticky = navbar.offsetTop;
+    
+    // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+    function myFunction() {
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky")
+      } else {
+        navbar.classList.remove("sticky");
+      }
+    }
+    
+    
+</script>
+
+    <!-- Include the JavaScript code for fetching product data and creating product cards -->
+    <script src="productsView.js"></script>
+   
+</body>
+</html>

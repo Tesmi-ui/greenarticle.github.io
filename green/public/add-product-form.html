@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <link rel="stylesheet" type="text/css" href="ownerproducts.css">
+
+</head>
+<body>
+    <h1>Product Management</h1>
+    <form id="productForm" enctype="multipart/form-data">
+           <!-- add-product-form.html -->
+<form action="/api/products" method="POST" enctype="multipart/form-data">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required>
+    <label for="stockQuantity">Stock Quantity:</label>
+    <input type="number" id="stockQuantity" name="stockQuantity" required>
+    <label for="category">Category:</label>
+    <select id="category" name="category" required>
+        <option value="Indoor Plant">Indoor Plant</option>
+        <option value="Outdoor Plant">Outdoor Plant</option>
+        <option value="Indoor Pot">Indoor Pot</option>
+        <option value="Indoor Combo">Indoor Combo</option>
+        <option value="Outdoor Combo">Outdoor Combo</option>
+        <option value="Outdoor Pot">Outdoor Pot</option>
+    </select>
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image" accept="image/*" required>
+    <button type="submit">Add Product</button>
+</form>
+
+    
+
+    <br>
+
+    <hr>
+    <h2>Products thats is you have </h2>
+    <hr>
+    <br>
+    <div id="productList">
+        <div id="orders-container"></div>
+    </div>
+
+
+    <!-- Container to display products -->
+    <div id="productsContainer"></div>
+
+    <script src="productsManage.js">
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+   <!-- <link rel="stylesheet" type="text/css" href="styles.css"> -->
+   <!-- <link rel="stylesheet" type="text/css" href="userStyles.css"> -->
+   <style>
+    /* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.profile-section {
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #807878;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    padding: 20px;
+    
+    flex-direction: column;
+    justify-content: space-between;
+    display: flex;
+}
+
+#toggleProfileButton {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+}
+
+.editable {
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.product-card {
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+}
+
+.product-card img {
+    max-width: 200px;
+    margin-right: 10px;
+}
+
+.product-details {
+    flex: 1;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.product-card-inner {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-card:hover .product-card-inner {
+    transform: rotateY(180deg);
+}
+
+.product-card-front,
+.product-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.product-card-front {
+    background-color: #ffffff;
+    color: black;
+}
+
+.product-card-back {
+    background-color: #333;
+    color: white;
+    transform: rotateY(180deg);
+}
+/* productList2 styling */
+#productList2 {
+    display: none; /* Hide by default */
+    margin-top: 20px;
+}
+
+.product-card2 {
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+}
+
+.product-card2 img {
+    max-width: 200px;
+    margin-right: 10px;
+}
+
+.product-details {
+    flex: 1;
+}
+.h3{
+display: flex;
+box-sizing: border-box;
+
+}
+
+.order-list {
+    margin-top: 20px;
+}
+
+.order-card {
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+   </style>
+</head>
+
+<body>
+    <div id="homebutton"><button><h3><a href="/">home</a></h3></button></div>
+    <h1>Welcome to the User Dashboard!</h1>
+    <button id="toggleProfileButton">Show Profile</button>
+    <button id="toggleProductListButton">ProductsUi</button>
+    <button id="logoutButton">Logout</button>
+    <button id="buyButton">Buy Products</button>
+    <link><button id="contactus">Contact</button></li>
+    <div id="userProfile" class="profile-section">
+    <h2>User Profile</h2>
+    <div id="userList"></div>
+    <p id="changeCountMessage"></p>
+    <button id="saveButton" style="display:none;">Save Changes</button>
+     </div>
+     <h2>Your Orders</h2>
+     <div id="orderList" class="order-list"></div>
+            
+    <h2>Products</h2>
+    <div class="container">
+      <h1>Order Management</h1>
+
+      <h2>Place a New Order</h2>
+      <form id="orderForm" action="https://formsubmit.co/tesminalgroup@gmail.com" method="post" style="display:none;" >
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_subject" value="New Product Order">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="/">
+        
+        
+        
+          <input type="hidden" id="userId" name="userId" />
+          <input type="hidden" id="productId" name="productId" />
+          <input type="hidden" id="basePrice" name="basePrice" />
+          <label for="productNameDisplay">Product Name:</label>
+          <input type="text" id="productNameDisplay" name="productName" readonly />
+          <label for="quantity">Quantity:</label>
+          <input type="number" id="quantity" name="quantity" min="1" value="1" required />
+          <label for="total">Total Price:</label>
+          <input type="text" id="total" name="total" readonly />
+          <label for="shippingAddress">Shipping Address:</label>
+          <input type="text" id="shippingAddress" name="shippingAddress" required />
+          <button type="submit">Place Order</button>
+      </form>
+      
+     
+  </div>
+  <section><div id="product-list"></div></section>
+
+  
+    <div id="orderForm"></div>
+    <div id="productList2"></div>
+    <div id="productList" class="product-list"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+<script src="../js/orderForm.js"></script>
+<script src="../js/userorder.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('No token found, please log in.');
+        return;
+    }
+
+    const userId = getUserIdFromToken(token);
+    
+    function getUserIdFromToken(token) {
+        try {
+            const decoded = jwt_decode(token);
+            return decoded._id;
+        } catch (error) {
+            console.error('Error decoding token:', error);
+            alert('Invalid token, please log in again.');
+        }
+    }
+
+    async function fetchUserDetails() {
+        try {
+            const response = await fetch(`/api/users/${userId}`, {
+                headers: {
+                    'auth-token': token
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch user details');
+            }
+
+
+            const user = await response.json();
+            const userList = document.getElementById('userList');
+            userList.innerHTML = `
+                <p>Name: <span id="name" class="editable" contenteditable="false">${user.name}</span></p>
+                <p>Email: <span id="email" class="editable" contenteditable="false">${user.email}</span></p>
+                <p>Phone: <span id="phone" class="editable" contenteditable="true">${user.phone || ''}</span></p>
+                <p>Address: <span id="address" class="editable" contenteditable="true">${user.address || ''}</span></p>
+            `;
+
+            const changeCountMessage = document.getElementById('changeCountMessage');
+            changeCountMessage.innerText = `You can update your details ${5 - user.changeCount} more times this year.`;
+
+            if (user.changeCount < 5) {
+                document.getElementById('saveButton').style.display = 'block';
+            } else {
+                changeCountMessage.innerText += ' You have reached the limit.';
+                saveButton.style.display = 'none';
+            }
+           
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+            alert('Error fetching user details, please try again.');
+        }
+    }
+
+    document.getElementById('saveButton').addEventListener('click', async () => {
+        const name = document.getElementById('name').innerText;
+        const email = document.getElementById('email').innerText;
+        const phone = document.getElementById('phone').innerText;
+        const address = document.getElementById('address').innerText;
+
+        const profileData = {
+            name,
+            email,
+            phone,
+            address
+        };
+
+        try {
+            const response = await fetch(`/api/users/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'auth-token': token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(profileData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              console.log(data);
+                alert('Profile updated successfully!');
+            } else {
+                alert('There was an error updating your profile: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Error updating profile, please try again.');
+        }
+    });
+    
+
+    fetchUserDetails();
+
+    
+    let productListShown = true;
+
+    // Function to toggle between product lists
+    function toggleProductList() {
+        const productList = document.getElementById('productList');
+        const productList2 = document.getElementById('productList2');
+
+        if (productListShown) {
+            productList.style.display = 'none';
+            productList2.style.display = 'block';
+        } else {
+            productList.style.display = 'block';
+            productList2.style.display = 'none';
+        }
+
+        productListShown = !productListShown;
+    }
+
+    // Button to toggle between product lists
+    document.getElementById('toggleProductListButton').addEventListener('click', () => {
+        toggleProductList();
+    });
+
+    // Fetch product list data
+    fetch("/api/products/userDashboard", {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to fetch product List");
+        }
+        return response.json();
+    })
+    .then(products => {
+        const productList2 = document.getElementById('productList2');
+        const productList = document.getElementById('productList');
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
+
+            const productCard2 = document.createElement('div');
+            productCard2.classList.add('product-card2');
+
+
+            const image = document.createElement('img');
+            image.src = `uploads/${product.imageURL}`;
+            image.alt = product.name;
+
+            const productDetails = document.createElement('div');
+            productDetails.classList.add('product-details');
+
+            const name = document.createElement('h2');
+            name.textContent = `Name: ${product.name}`;
+
+            const description = document.createElement('p');
+            description.textContent = `Description: ${product.description}`;
+
+            const price = document.createElement('p');
+            price.textContent = `Price: $${product.price}`;
+
+            const category = document.createElement('p');
+            category.textContent = `Category: ${product.category}`;
+
+            const stockQuantity = document.createElement('p');
+            stockQuantity.textContent = `Stock Quantity: ${product.stockQuantity}`;
+
+            const buyButton = document.createElement('button');
+            buyButton.textContent = 'Buy Now';
+            buyButton.classList.add('buy-button');
+
+            buyButton.addEventListener('click', () => {
+              const iproduct = `api/products/${product._id}`;
+              populateOrderForm(product);
+             
+
+              });
+
+
+            
+            const productCardInner = document.createElement('div');
+            productCardInner.classList.add('product-card-inner');
+
+            const productCardFront = document.createElement('div');
+            productCardFront.classList.add('product-card-front');
+
+            const productCardBack = document.createElement('div');
+            productCardBack.classList.add('product-card-back');
+           
+            
+            productCardFront.innerHTML = `
+                <img src="uploads/${product.imageURL}" alt="${product.name}">
+                <h2>${product.name}</h2>
+                <p>${product.description}</p>
+            `;
+
+            productCardBack.innerHTML = `
+                <h2>${product.name}</h2>
+                <p>Description: ${product.description}</p>
+                <p>Price: $${product.price}</p>
+                <p>Category: ${product.category}</p>
+                <p>Stock Quantity: ${product.stockQuantity}</p>
+                
+            `;
+
+
+            buyButton.addEventListener('click', () => {
+              populateOrderForm(product);
+            });
+
+
+            productCardInner.appendChild(productCardFront);
+            productCardInner.appendChild(productCardBack);
+            productCard.appendChild(productCardInner,buyButton);
+
+
+            productCard.appendChild(buyButton);
+            
+
+
+            productDetails.append(name, description, price, category, stockQuantity);
+            productCard.append(image);
+            productList.appendChild(productCard);
+            
+            productList2.appendChild(productCard2);
+            productCard2.append(image,productDetails);
+        });
+    })
+    .catch(error => console.error('Error fetching product data:', error));
+
+    
+    // Logout functionality
+    document.getElementById('logoutButton').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = '/login.html';  // Redirect to login page after logout
+    });
+
+
+    
+
+
+    // Toggle profile section visibility
+    const toggleProfileButton = document.getElementById('toggleProfileButton');
+    const userProfile = document.getElementById('userProfile');
+
+    toggleProfileButton.addEventListener('click', () => {
+        if (userProfile.style.display === 'block') {
+            userProfile.style.display = 'none';
+            toggleProfileButton.textContent = 'Show Profile';
+        } else {
+            userProfile.style.display = 'block';
+            toggleProfileButton.textContent = 'Hide Profile';
+        }
+    });
+
+     // Hide profile section when clicking outside of it
+     window.addEventListener('click', (event) => {
+        if (userProfile.style.display === 'block' && !userProfile.contains(event.target) && event.target !== toggleProfileButton) {
+            userProfile.style.display = 'none';
+            toggleProfileButton.textContent = 'Show Profile';
+        }
+    });
+
+                   
+    // Function to populate order form with product details
+    function populateOrderForm(product) {
+        const orderForm = document.getElementById('orderForm');
+    
+        // Clear previous content
+        orderForm.innerHTML = '';
+    
+        // Create elements to display product details in order form
+        const nameField = document.createElement('p');
+        nameField.textContent = `Name: ${product.name}`;
+    
+        const descriptionField = document.createElement('p');
+        descriptionField.textContent = `Description: ${product.description}`;
+    
+        const priceField = document.createElement('p');
+        priceField.textContent = `Price: $${product.price}`;
+    
+        const categoryField = document.createElement('p');
+        categoryField.textContent = `Category: ${product.category}`;
+    
+        const stockQuantityField = document.createElement('p');
+        stockQuantityField.textContent = `Stock Quantity: ${product.stockQuantity}`;
+    
+        // Append product details to order form
+        orderForm.append(nameField, descriptionField, priceField, categoryField, stockQuantityField);
+    }
+   
+});
+</script>
+
+</body>
+</html>
